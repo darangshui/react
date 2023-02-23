@@ -1,6 +1,6 @@
 import DiaryItem from "./DiaryItem";
 
-const DiaryList = ({ diaryList, onDelete }) => {
+const DiaryList = ({ diaryList, onRemove, onEdit }) => {
   console.log('dataList', diaryList)
   return (
     <div className="DiaryList">
@@ -12,7 +12,8 @@ const DiaryList = ({ diaryList, onDelete }) => {
             <DiaryItem 
               key={item.id}
               {...item}
-              onDelete={onDelete}
+              onRemove={onRemove}
+              onEdit={onEdit}
             />
           ))
         }

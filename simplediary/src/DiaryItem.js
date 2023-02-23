@@ -1,4 +1,38 @@
-const DiaryItem = ({ author, content, create_date, emotion, id, onDelete }) => {
+import React, { useState, useRef } from 'react';
+
+const DiaryItem = ({ author, content, create_date, emotion, id, onRemove, onEdit }) => {
+
+  const [isEdit, setIsEdit] = useState(false);
+
+  const toggleIsEdit = () => setIsEdit(!isEdit);
+
+  const handleRemove = () => {
+    if (window.confirm(`${id}번째 일기를 정말로 삭제하시겠습니까?`)) {
+      onRemove(id);
+    }
+  }
+
+  const [ localCotent, setLocalContent] = useState(content);
+  
+  const localContentInput = useRef();
+
+  const handleQuitEdit = () => {
+    setIsEdit(false);
+    setLocalContent(content);
+  }
+
+  const handleEdit = () => {
+    if (localCotent.length < 5) {
+      localContentInput.current.focus();
+      return;
+    }
+    
+    if (window.confirm(`${id}번째 일기를 수정하시곘습니까?`)) {
+      onEdit(id, localCotent);
+      toggleIsEdit();
+    }
+  }
+
   return (
     <div className="DiaryItem">
       <div className="info">
@@ -9,14 +43,34 @@ const DiaryItem = ({ author, content, create_date, emotion, id, onDelete }) => {
         </span>
       </div>
       <div className="content">
-        {content}
-      </div>
-      <button onClick={() => {
-        console.log(id);
-        if (window.confirm(`${id}번째 일기를 정말로 삭제하시겠습니까?`)) {
-          onDelete(id);
+        {
+          isEdit ? (
+          <>
+            <textarea ref={localContentInput} value={localCotent} onChange={(e) => {
+              setLocalContent(e.target.value);
+            }} />
+          </> 
+          ) : (
+          <>
+            {content}
+          </>
+          )
         }
-      }}>삭제하기</button>
+      </div>
+
+      {
+        isEdit ? (
+          <>
+            <button onClick={handleQuitEdit}>수정 취소</button>
+            <button onClick={handleEdit}>수정 완료</button>
+          </> 
+        ) : (
+          <>
+            <button onClick={handleRemove}>삭제하기</button>
+            <button onClick={toggleIsEdit}>수정하기</button>
+          </>
+        )
+      }
     </div>
   )
 }
