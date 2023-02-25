@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const DiaryItem = ({ author, content, create_date, emotion, id, onRemove, onEdit }) => {
 
@@ -75,4 +75,4 @@ const DiaryItem = ({ author, content, create_date, emotion, id, onRemove, onEdit
   )
 }
 
-export default DiaryItem;
+export default React.memo(DiaryItem);
